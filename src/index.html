@@ -1,1 +1,60 @@
-hello
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Crawler Executor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Web Crawler Executor</h1>
+    <button onclick="runWebCrawler('none', 5, 'none', 'descending')">Show the First 30 Entries</button>
+    <button onclick="runWebCrawler('more_than', 5, 'comments', 'descending')">Filter More Than 5 Words, Descending Comments</button>
+    <button onclick="runWebCrawler('less_or_equal', 5, 'points', 'descending')">Filter 5 or Less Words, Descending Points</button>
+
+    <div id="output" style="margin-top: 20px;">
+        <!-- Output from the script will be displayed here -->
+    </div>
+
+    <script>
+        function runWebCrawler(filterType, filterLength, orderBy, orderByDirection) {
+            // Create an XMLHttpRequest to call the PHP script
+            var xhr = new XMLHttpRequest();
+            var url = 'controller/runWebCrawler.php';
+            var params = `filterType=${filterType}&filterLength=${filterLength}&orderBy=${orderBy}&orderByDirection=${orderByDirection}`;
+
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    document.getElementById('output').innerHTML = '<pre>' + xhr.responseText + '</pre>';
+                } else {
+                    document.getElementById('output').innerHTML = 'Error: ' + xhr.status;
+                }
+            };
+
+            xhr.send(params);
+        }
+    </script>
+</body>
+</html>
